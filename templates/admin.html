@@ -11,7 +11,26 @@
     <form action="/admin/login" method="post" accept-charset="utf-8">
         <input type="text" id="username" name="username" placeholder="username">
         <input type="password" id="password" name="password" placeholder="password">
-        <input type="submit">
+        <input type="submit" onclick="login()">
     </form>
+
+    <script>
+        function login() {
+            event.preventDefault();
+            let username = document.getElementById("username").value
+            let password = document.getElementById("password").value
+            const data = fetch('/admin/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: username,
+                        password: password
+                    })
+                })
+            window.location.href = '/';
+        }
+    </script>
 </body>
 </html>
