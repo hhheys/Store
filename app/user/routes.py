@@ -7,7 +7,7 @@ from starlette.requests import Request
 from starlette.responses import Response
 
 from app.user.accessor import create_user, validate_user
-from app.utils.cookies_session import COOKIE_NAME, send_user_cookie
+from app.utils.cookies_session import COOKIE_NAME, get_user_token
 from app.utils.utils import templates
 
 router = APIRouter(
@@ -43,7 +43,7 @@ async def login(request: Request):
 async def login(request: Request, response: Response, username: Annotated[str, Body()], password: Annotated[str, Body()]):
     user = await validate_user(username, password)
     if user:
-        token = send_user_cookie(response, user.id)
+        token = get_user_token(response, user.id)
         response.delete_cookie(COOKIE_NAME)
         response.set_cookie(key=COOKIE_NAME, value=str(token))
         return {

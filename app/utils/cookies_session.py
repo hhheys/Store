@@ -30,6 +30,7 @@ async def get_current_admin(request: Request):
                 return await get_admin_by_id(payload.get("id"))
             except Exception as e:
                 raise HTTPException(status_code=401, detail="Unauthorized")
+    raise HTTPException(status_code=401, detail="Unauthorized")
 
 async def get_current_user(request: Request):
     payload = _get_auth_cookie(request)
@@ -43,7 +44,7 @@ async def get_current_user(request: Request):
 def get_admin_token(response: Response, admin_id: int):
     return _send_auth_cookie(response, "admin", admin_id)
 
-def send_user_cookie(response: Response, user_id: int):
+def get_user_token(response: Response, user_id: int):
     return _send_auth_cookie(response, "user", user_id)
 
 def _get_auth_cookie(request: Request):

@@ -15,11 +15,11 @@
     </form>
 
     <script>
-        function login() {
+        async function login() {
             event.preventDefault();
             let username = document.getElementById("username").value
             let password = document.getElementById("password").value
-            const data = fetch('/admin/login', {
+            const response = await fetch('/admin/login', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
@@ -29,7 +29,11 @@
                         password: password
                     })
                 })
-            window.location.href = '/';
+            if (response.status === 200) {
+                window.location.href = '/';
+            } else {
+                alert("Неверный логин или пароль!")
+            }
         }
     </script>
 </body>

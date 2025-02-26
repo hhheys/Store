@@ -27,8 +27,13 @@ async def login(request: Request, response: Response, username: Annotated[str, B
         response.set_cookie(key = COOKIE_NAME, value = str(token))
     else:
         raise HTTPException(status_code=403)
-    return {'ok':True}
+    return json.dumps({'ok': True})
 
 @router.get("/getme", response_class=HTMLResponse)
 async def getme(request: Request, admin = Depends(get_current_admin)):
-    return "ok"
+    return json.dumps({
+        'ok':True,
+        'admin':{
+            'name':admin.name,
+        }
+    })

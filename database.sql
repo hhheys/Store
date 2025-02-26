@@ -19,12 +19,12 @@ CREATE TABLE "products" (
 
 CREATE TABLE "categories" (
   "id" SERIAL PRIMARY KEY,
-  "name" varchar
+  "name" varchar unique
 );
 
 CREATE TABLE "manufacturers" (
   "id" SERIAL PRIMARY KEY,
-  "name" varchar,
+  "name" varchar unique,
   "image_filename" varchar
 );
 
@@ -52,7 +52,7 @@ CREATE TABLE "sales" (
 
 CREATE TABLE "users" (
   "id" SERIAL PRIMARY KEY,
-  "username" varchar,
+  "username" varchar unique,
   "phone_number" integer,
   "password" varchar,
   "registration_date" timestamp DEFAULT CURRENT_DATE
