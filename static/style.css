@@ -1,0 +1,38 @@
+a{
+    text-decoration: none;
+    color: black;
+}
+
+.user_logo{
+    width: 3rem;
+}
+
+.nav-item.nav-link{
+    border-radius: 32px;
+    padding: 10px 40px 10px 40px;
+    font-family: "Manrope", serif;
+    color: white;
+    text-decoration: none;
+}
+
+.nav-link.active {
+            background-color: #f7a41d;
+            color: white !important;
+            border-radius: 20px;
+            padding-right: 12px;
+}
+
+.nav-link:hover:not(.active){
+    color: #f7a41d !important;
+
+}
+
+a:hover{
+    color: #f7a41d !important;
+    filter: brightness(90%);
+    animation: linear all;
+}
+
+.advertisement {
+    min-height: 300px;
+}
