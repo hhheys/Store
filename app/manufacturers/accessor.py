@@ -1,4 +1,3 @@
-import asyncio
 
 from app.manufacturers.models import Manufacturer
 from app.store.database import db
@@ -18,7 +17,7 @@ async def get_manufacturer_by_id(manufacturer_id):
 
 async def create_manufacturer(name, image_filename) -> Manufacturer:
     try:
-        res = await db.execute("INSERT INTO manufacturers (name, image_filename) VALUES ($1, $2)", name, image_filename)
+        await db.execute("INSERT INTO manufacturers (name, image_filename) VALUES ($1, $2)", name, image_filename)
     except Exception as e:
         print(e)
         return None

@@ -7,12 +7,15 @@ from starlette.responses import Response
 
 from app.admin.accessor import get_admin_by_id
 from app.config import config
-from app.store.database import db
 from app.user.accessor import get_user_by_id
 
 SESSION_DB = {}
 
 COOKIE_NAME = "access_token"
+
+class RequiresAdminLoginException(Exception):
+    pass
+
 
 def decode_jwt(token: str):
     try:
@@ -23,23 +26,34 @@ def decode_jwt(token: str):
         raise HTTPException(status_code=401, detail="Invalid token")
 
 async def get_current_admin(request: Request):
+    # payload = {}
+    # try:
+    #     payload = _get_auth_cookie(request)
+    # except Exception:
+    #     raise RequiresAdminLoginException
     payload = _get_auth_cookie(request)
     if payload and payload["type"]:
         if payload["type"] == "admin":
             try:
                 return await get_admin_by_id(payload.get("id"))
-            except Exception as e:
+            except Exception:
                 raise HTTPException(status_code=401, detail="Unauthorized")
     raise HTTPException(status_code=401, detail="Unauthorized")
 
 async def get_current_user(request: Request):
-    payload = _get_auth_cookie(request)
+    try:
+        payload = _get_auth_cookie(request)
+    except HTTPException:
+        return None
     if payload and payload["type"]:
         if payload["type"] == "user":
             try:
                 return await get_user_by_id(payload.get("id"))
-            except Exception as e:
-                raise HTTPException(status_code=401, detail="Unauthorized")
+            except Exception:
+                pass
+            # except Exception as e:
+            #     raise HTTPException(status_code=401, detail="Unauthorized")
+    return None
 
 def get_admin_token(response: Response, admin_id: int):
     return _send_auth_cookie(response, "admin", admin_id)
