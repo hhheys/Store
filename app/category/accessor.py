@@ -1,4 +1,3 @@
-import asyncio
 
 from app.category.models import Category
 from app.store.database import db
@@ -16,7 +15,7 @@ async def get_category_by_id(category_id):
 
 async def create_category(name) -> Category:
     try:
-        res = await db.execute("INSERT INTO categories (name) VALUES ($1)", name)
+        await db.execute("INSERT INTO categories (name) VALUES ($1)", name)
     except Exception as e:
         print(e)
         return None

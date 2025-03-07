@@ -1,6 +1,3 @@
-import asyncio
-from datetime import datetime
-
 from app.store.database import db
 from app.user.models import User
 from app.utils.utils import get_hash
@@ -12,7 +9,7 @@ async def create_user(username: str, phone_number: str, password: str) -> User |
         user = await db.fetchrow("SELECT * FROM users WHERE username = $1", username)
         return User(**user)
 
-    except Exception as e:
+    except Exception:
         return None
 
 async def get_user_by_id(id: int) -> User | None:

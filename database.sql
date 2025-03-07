@@ -30,17 +30,16 @@ CREATE TABLE "manufacturers" (
 
 CREATE TABLE "price_changes" (
   "id" SERIAL PRIMARY KEY,
-  "date" timestamp,
+  "date" timestamp default current_timestamp,
   "product_id" integer,
-  "price" integer,
-  "is_promotion" bool
+  "price" integer
 );
 
 CREATE TABLE "deliveries" (
   "id" SERIAL PRIMARY KEY,
   "product_id" integer,
   "count" integer,
-  "date" timestamp
+  "date" timestamp default current_timestamp
 );
 
 CREATE TABLE "sales" (
@@ -55,7 +54,7 @@ CREATE TABLE "users" (
   "username" varchar unique,
   "phone_number" integer,
   "password" varchar,
-  "registration_date" timestamp DEFAULT CURRENT_DATE
+  "registration_date" timestamp DEFAULT current_timestamp
 );
 
 CREATE TABLE "orders" (
@@ -68,7 +67,8 @@ CREATE TABLE "orders" (
 CREATE TABLE "order_statuses" (
   "id" SERIAL PRIMARY KEY,
   "order_id" integer,
-  "status" integer
+  "status" integer,
+    "date" timestamp DEFAULT current_timestamp
 );
 
 CREATE TABLE "warehouse" (
@@ -81,7 +81,7 @@ CREATE TABLE "carts" (
   "product_id" integer,
   "user_id" integer,
   "count" integer,
-  "added_at" timestamp
+  "added_at" timestamp DEFAULT current_timestamp
 );
 
 ALTER TABLE "products" ADD FOREIGN KEY ("category_id") REFERENCES "categories" ("id");
@@ -105,3 +105,5 @@ ALTER TABLE "products" ADD FOREIGN KEY ("id") REFERENCES "warehouse" ("product_i
 ALTER TABLE "carts" ADD FOREIGN KEY ("product_id") REFERENCES "products" ("id");
 
 ALTER TABLE "carts" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+
+ALTER TABLE carts ADD CONSTRAINT unique_product_client UNIQUE (product_id, client_id);

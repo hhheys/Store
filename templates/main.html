@@ -1,83 +1,34 @@
-<!doctype html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
-    <link href="../static/style.css" rel="stylesheet">
-    <title>EStore</title>
-</head>
-<body>
-    <header>
-        <nav class="navbar navbar-expand-lg bg-white border-bottom">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="#">E store:</a>
-            <div class="">
-                <ul class="navbar-nav me-auto">
-                    <li class="nav-item mx-3">
-                        <a class="nav-link active text-center" href="#">Главная</a>
-                    </li>
-                    <li class="nav-item mx-3">
-                        <a class="nav-link text-dark" href="#">Покупателю</a>
-                    </li>
-                    <li class="nav-item mx-3">
-                        <a class="nav-link text-dark" href="#">Юридическим лицам</a>
-                    </li>
-                </ul>
-            </div>
-            <div>
-                <a href="#" class="text-dark">
-                    <img src="../static/user_icon.png" class="user_logo">
-                </a>
-            </div>
-        </div>
-    </nav>
-    </header>
-
+{% include 'header.html' %}
     <div class="container mt-4">
         <div class="row">
             <!-- Левая панель категорий -->
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <h4 class="fw-semibold text-center">Добро пожаловать в интернет-магазин электронной техники EStore!</h4>
                 <div class="p-3 rounded border">
                     <h5 class="my-3">Основные категории:</h5>
                     <ul class="list-unstyled mx-3">
-                        <li class="my-2"><a href="">Смартфоны</a></li>
-                        <li class="my-2"><a href="">Аксессуары</a></li>
-                        <li class="my-2"><a href="">Ноутбуки и компьютеры</a></li>
-                        <li class="my-2"><a href="">Комплектующие для ПК</a></li>
-                        <li class="my-2"><a href="">Телевизоры и мультимедиа</a></li>
-                        <li class="my-2"><a href="">Игровая техника</a></li>
-                        <li class="my-2"><a href="">Бытовая техника</a></li>
-                        <li class="my-2"><a href="">Умный дом</a></li>
-                        <li class="my-2"><a href="">Фото и видео техника</a></li>
-                        <li class="my-2"><a href="">Аудиотехника</a></li>
-                        <li class="my-2"><a href="">Автоэлектроника</a></li>
+                        {% for cat in categories %}
+                        <li class="my-2"><a href="/category?cat_id={{cat.id}}">{{cat.name}}</a></li>
+                        {% endfor %}
                     </ul>
                 </div>
             </div>
             <!-- Центральная и правая часть -->
-            <div class="col-md-9">
-                <!-- Блок рекламы -->
-                <div class="advertisement bg-light p-4 rounded mb-3 text-center border">
-                    <p>Блок рекламы хз надо придумать картинку</p>
-                </div>
+            <div class="col-md-8">
+<!--                &lt;!&ndash; Блок рекламы &ndash;&gt;-->
+<!--                <div class="advertisement bg-light rounded mb-3 text-center border">-->
+<!--                    <img src="../static/ad.png" alt="" class="img-thumbnail img">-->
+<!--                </div>-->
+
+                <img src="../static/ad.png" alt="" class="rounded border img-fluid img mb-2 advertisement">
                 <!-- Горизонтальная галерея товаров -->
                 <div class="bg-light p-4 rounded border">
                     <h5>Бренды</h5>
-                    <div class="d-flex gap-2 mb-3 bg-light p-4">
-                    <a href=""><img class="img-thumbnail p-3" style="max-height: 80px;" src="../static/img/company_logos/apple.png"></a>
-                    <a href=""><img class="img-thumbnail p-3" style="max-height: 80px;" src="../static/img/company_logos/samsung.png"></a>
-                    <a href=""><img class="img-thumbnail p-3" style="max-height: 80px;" src="../static/img/company_logos/xiaomi.png"></a>
-
+                    <div class="d-flex gap-2 bg-light p-2">
+                        {% for manufacturer in manufacturers %}
+                        <a href="/manufacturer?man_id={{manufacturer.id}}"><img class="img-thumbnail p-3" style="max-height: 80px;" src="../static/img/manufacturers_images/{{manufacturer.image_filename}}"></a>
+                        {% endfor %}
                 </div>
-                </div>
-                <!-- Горячие предложения -->
-                <div class="bg-light p-4 rounded border">
-                    <h5>Горячие предложения</h5>
                 </div>
             </div>
         </div>

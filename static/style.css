@@ -22,6 +22,18 @@ a{
             padding-right: 12px;
 }
 
+.inactive {
+    background-color: #959595;
+    color: white !important;
+    border-radius: 20px;
+    padding-right: 12px;
+}
+
+.inactive:hover {
+    color: white !important;
+    cursor: not-allowed;
+}
+
 .nav-link:hover:not(.active){
     color: #f7a41d !important;
 
@@ -33,6 +45,25 @@ a:hover{
     animation: linear all;
 }
 
+.gray {
+    background-color: #b5b5b5;
+}
+
+a.btn:hover{
+    color: white !important;
+    filter: brightness(90%);
+    animation: linear all;
+}
+
+.border{
+    border-width: 1.5px !important;
+}
+
+.rounded{
+    border-radius: 20px !important;
+}
+
 .advertisement {
-    min-height: 300px;
+    height: auto;
+    width: 100%;
 }
