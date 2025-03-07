@@ -1,4 +1,3 @@
-import asyncio
 
 from app.admin.models import Admin
 from app.store.database import db

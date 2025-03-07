@@ -9,14 +9,26 @@ from fastapi.templating import Jinja2Templates
 def get_hash(password):
     return hashlib.sha256(password.encode()).hexdigest()
 
-def save_image(manufacturer_name, file:UploadFile):
-    filename = f'{manufacturer_name}{Path(file.filename).suffix}'
+
+def save_manufacturer_image(manufacturer_name:str, file:UploadFile):
+    return _save_image("../static/img/manufacturers_images/", manufacturer_name, file)
+
+def save_product_image(product_name:str, file:UploadFile):
+    return _save_image("../static/img/products_images/", product_name, file)
+
+
+
+def _save_image(path, name, file:UploadFile):
+    if not os.path.exists(path):
+        os.mkdir(path)
+
+    filename = f'{name}{Path(file.filename).suffix}'
     try:
-        with open(f"../static/img/manufacturers_images/{filename}", 'wb+') as buffer:
+        with open(f"{path}{filename}", 'wb+') as buffer:
             shutil.copyfileobj(file.file, buffer)
     except Exception as e:
+        print(e)
         raise HTTPException(status_code=500, detail=f"File upload failed: {str(e)}")
-
     return filename
 
 templates = Jinja2Templates(directory="../templates")

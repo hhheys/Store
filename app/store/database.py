@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
 
 import asyncpg
-from asyncpg import Connection, Pool
+from asyncpg import Pool
 from fastapi import FastAPI
 
 from app.config import config

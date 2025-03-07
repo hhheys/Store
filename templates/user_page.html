@@ -1,0 +1,118 @@
+{% include 'header.html' %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-5">
+                <div class="border rounded p-3">
+                    <h5>Информация о пользователе: </h5>
+                    <p class="mt-4">Имя: {{current_user.username}}</p>
+                    <p>Номер телефона: {{current_user.phone_number}}</p>
+                    <p>Дата регистрации: {{current_user.registration_date}}</p>
+                </div>
+
+                <div class="border rounded p-3 mt-3">
+
+                    <div class="d-flex mb-3">
+                        <h5 class="my-auto">Корзина</h5>
+                        {% if cart|length == 0 or not (cart | selectattr('count', '>', 0) | list | length) > 0 %}
+                        <p href="" class="btn btn-secondary ms-auto my-auto inactive" onclick="">Оформить заказ</p>
+                        {% else %}
+                        <a href="/cart" class="btn btn-success ms-auto">Оформить заказ</a>
+                        {% endif %}
+                    </div>
+
+                    {% if cart|length == 0 %}
+                    <p class="my-auto ms-auto mx-4 text-center">В корзине пусто...</p>
+                    {% endif %}
+                    {% for product_card in cart %}
+                    {% if product_card.count <= 0 %}
+                    <div class="d-flex gray border p-2 rounded mt-2">
+                        <img src="../static/img/products_images/{{product_card.product.image_filename}}" alt="" style="width: 50px" class="rounded">
+                        <h6 class="my-auto mx-4 text-decoration-line-through">{{product_card.product.name}}</h6>
+                        <p class="my-auto ms-auto mx-4">товар закончился - {{product_card.new_price.price}} ₽</p>
+                        <a href="/product/del_from_cart?pr_id={{product_card.product.id}}" class="my-auto btn btn-danger" onclick="del_from_cart({{product_card.product.id}})">Удалить</a>
+                    </div>
+                    {% else %}
+                    <div class="d-flex border p-2 rounded mt-2">
+                        <img src="../static/img/products_images/{{product_card.product.image_filename}}" alt="" style="width: 50px" class="rounded">
+                        <h6 class="my-auto mx-4">{{product_card.product.name}}</h6>
+                        <p class="my-auto ms-auto mx-4">{{product_card.new_price.price}} ₽</p>
+                        <a href="/product/del_from_cart?pr_id={{product_card.product.id}}" class="my-auto btn btn-danger" onclick="del_from_cart({{product_card.product.id}})">Удалить</a>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+
+        <div class="col-md-7">
+            <div class="border rounded p-3">
+                <h4>Заказы: </h4>
+                <div class="d-flex">
+
+                    {% for order in orders %}
+                    <div class="card border rounded p-3 m-2 flex-grow-1" style="max-width: 250px">
+                        <h5 class="text-center">Заказ №{{order.id}}</h5>
+                        <p class="text-center">Дата оформления: <br>{{order.date}}</p>
+                        <p class="my-1">Позиции: </p>
+                        <ul class="list-unstyled mx-3">
+                            {% for position in order.positions %}
+                            <li>{{position.product.name}} - {{position.price.price}}  ₽</li>
+                            {% endfor %}
+                        </ul>
+                        <p class="my-1 text-center">Статус</p>
+                        <p class="my-1 text-center text-bg-warning text-wrap rounded py-1">{{order.status}}</p>
+                    </div>
+
+                    {% endfor %}
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script>
+    async function del_from_cart(product_id) {
+        event.preventDefault()
+        const response = await fetch('/product/del_from_cart?pr_id=' + product_id, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        const json_res = await response.json();
+        if (json_res.status_code === 401) {
+            window.location.reload();
+        } else if (response.status === 200) {
+            window.location.href = '/';
+        } else {
+            alert("Не удалось добавить товар. Возможно он уже есть в корзине.")
+        }
+    }
+
+    async function create_order(){
+        event.preventDefault()
+        const response = await fetch('/product/add_to_cart', {
+        method: 'POST',
+        headers: {
+        'Content-Type': 'application/json'
+    },
+        body: JSON.stringify({
+        product_id: Number(product_id)
+    })
+    })
+        const json_res = await response.json();
+        console.log(JSON.stringify(json_res));
+        console.log(typeof parseInt(product_id), product_id);
+        console.log(json_res.status_code);
+        if (json_res.status_code === 401) {
+        window.location.replace(window.location.origin + '/user/login');
+    } else if (response.status === 200){
+        window.location.href = '/';
+    } else {
+        alert("Не удалось добавить товар. Возможно он уже есть в корзине.")
+    }
+    }
+</script>
+</body>
+</html>

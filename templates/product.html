@@ -1,0 +1,73 @@
+{% include 'header.html' %}
+
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-md-5">
+                <div class="p-3 rounded border">
+                    <div class="mx-5"><img src="../static/img/products_images/{{product.image_filename}}" class="img-fluid rounded"></div>
+                    <h3 class="mt-3">{{product.name}}</h3>
+                    <p class="">в наличии {{count}} шт</p>
+                    <div class="row">
+                        <div class="col-md-7">
+                            <h5 class="py-2">{{price.price}} ₽</h5>
+                        </div>
+                        <div class="col-md-5">
+                            {% if is_in_cart %}
+                                <p class="inactive text-center py-2">В корзине</p>
+                            {% elif count > 0%}
+                                <a class="nav-link active text-center py-2" href="#" onclick="add_to_cart({{product.id}})">В корзину</a>
+                            {% else %}
+                                <p class="inactive text-center py-2">В корзину</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="bg-light p-4 rounded mb-3 border">
+                    <h5>Описание товара: </h5>
+                    <p class="px-2">{{product.description}}</p>
+                </div>
+
+                <div class="bg-light p-4 rounded mb-3 border">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <h5 class="py-2">Производитель: </h5>
+                            <a href="/manufacturer?man_id={{manufacturer.id}}"><img class="img-thumbnail p-3" style="max-height: 80px;" src="../static/img/manufacturers_images/{{manufacturer.image_filename}}"></a>
+                        </div>
+                        <div class="col-md-5">
+                            <h5 class="py-2">Категория: </h5>
+                            <a href="/category?cat_id={{category.id}}"><h6>{{category.name}}</h6></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        async function add_to_cart(product_id){
+            event.preventDefault()
+            const response = await fetch('/product/add_to_cart', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        product_id: Number(product_id)
+                    })
+                })
+            const json_res = await response.json();
+            console.log(JSON.stringify(json_res));
+            console.log(typeof parseInt(product_id), product_id);
+            console.log(json_res.status_code);
+            if (json_res.status_code === 401) {
+                window.location.replace(window.location.origin + '/user/login');
+            } else if (response.status === 200){
+                window.location.href = '/';
+            } else {
+                alert("Не удалось добавить товар. Возможно он уже есть в корзине.")
+            }
+        }
+    </script>
+</body>
+</html>
