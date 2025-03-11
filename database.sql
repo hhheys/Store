@@ -100,10 +100,8 @@ ALTER TABLE "orders" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 
 ALTER TABLE "order_statuses" ADD FOREIGN KEY ("id") REFERENCES "orders" ("id");
 
-ALTER TABLE "products" ADD FOREIGN KEY ("id") REFERENCES "warehouse" ("product_id");
-
 ALTER TABLE "carts" ADD FOREIGN KEY ("product_id") REFERENCES "products" ("id");
 
 ALTER TABLE "carts" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 
-ALTER TABLE carts ADD CONSTRAINT unique_product_client UNIQUE (product_id, client_id);
+ALTER TABLE carts ADD CONSTRAINT unique_product_client UNIQUE (product_id, user_id);
