@@ -1,12 +1,11 @@
-import asyncio
 
 from app.admin.models import Admin
 from app.store.database import db
 from app.utils.utils import get_hash
 
 
-async def validate_admin(email, password) -> Admin | None:
-    data = await db.fetchrow("""SELECT * FROM admins WHERE name=$1 and password=$2""", email, password)
+async def validate_admin(name, password) -> Admin | None:
+    data = await db.fetchrow("""SELECT * FROM admins WHERE name=$1 and password=$2""", name, get_hash(password))
     if data:
         return Admin(**data)
     return None

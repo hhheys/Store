@@ -7,11 +7,15 @@ from starlette.responses import Response
 
 from app.admin.accessor import get_admin_by_id
 from app.config import config
-from app.store.database import db
+from app.user.accessor import get_user_by_id
 
 SESSION_DB = {}
 
 COOKIE_NAME = "access_token"
+
+class RequiresAdminLoginException(Exception):
+    pass
+
 
 def decode_jwt(token: str):
     try:
@@ -22,19 +26,40 @@ def decode_jwt(token: str):
         raise HTTPException(status_code=401, detail="Invalid token")
 
 async def get_current_admin(request: Request):
+    # payload = {}
+    # try:
+    #     payload = _get_auth_cookie(request)
+    # except Exception:
+    #     raise RequiresAdminLoginException
     payload = _get_auth_cookie(request)
     if payload and payload["type"]:
         if payload["type"] == "admin":
             try:
                 return await get_admin_by_id(payload.get("id"))
-            except Exception as e:
+            except Exception:
                 raise HTTPException(status_code=401, detail="Unauthorized")
+    raise HTTPException(status_code=401, detail="Unauthorized")
 
-def send_admin_cookie(response: Response, admin_id: int):
-    _send_auth_cookie(response, "admin", admin_id)
+async def get_current_user(request: Request):
+    try:
+        payload = _get_auth_cookie(request)
+    except HTTPException:
+        return None
+    if payload and payload["type"]:
+        if payload["type"] == "user":
+            try:
+                return await get_user_by_id(payload.get("id"))
+            except Exception:
+                pass
+            # except Exception as e:
+            #     raise HTTPException(status_code=401, detail="Unauthorized")
+    return None
 
-def send_user_cookie(response: Response, admin_id: int):
-    _send_auth_cookie(response, "user", admin_id)
+def get_admin_token(response: Response, admin_id: int):
+    return _send_auth_cookie(response, "admin", admin_id)
+
+def get_user_token(response: Response, user_id: int):
+    return _send_auth_cookie(response, "user", user_id)
 
 def _get_auth_cookie(request: Request):
     token = request.cookies.get(COOKIE_NAME)
@@ -42,7 +67,7 @@ def _get_auth_cookie(request: Request):
         raise HTTPException(status_code=401, detail="Unauthorized")
     return decode_jwt(token)
 
-def _send_auth_cookie(response: Response, cookie_type: str, user_id: int):
+def _send_auth_cookie(response: Response, cookie_type: str, user_id: int) -> str:
     payload = {}
     if cookie_type == "user":
         payload = {"type": "user", "id": user_id, "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)}
@@ -50,5 +75,6 @@ def _send_auth_cookie(response: Response, cookie_type: str, user_id: int):
         payload = {"type": "admin", "id": user_id, "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)}
     token = jwt.encode(payload, config.COOKIE_SECRET, algorithm="HS256")
     SESSION_DB[token] = user_id
-    print(f"DEBUG: Устанавливаем cookie: {token}")
-    response.set_cookie(COOKIE_NAME, token, httponly=True, max_age=3600)
+    # response.delete_cookie(key = COOKIE_NAME)
+    # response.set_cookie(COOKIE_NAME, token, httponly=True, max_age=3600, samesite="none")
+    return token
