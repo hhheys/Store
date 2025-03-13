@@ -67,8 +67,8 @@ CREATE TABLE "orders" (
 CREATE TABLE "order_statuses" (
   "id" SERIAL PRIMARY KEY,
   "order_id" integer,
-  "status" integer,
-    "date" timestamp DEFAULT current_timestamp
+  "status" integer default 1,
+  "date" timestamp DEFAULT current_timestamp
 );
 
 CREATE TABLE "warehouse" (
@@ -98,7 +98,7 @@ ALTER TABLE "sales" ADD FOREIGN KEY ("order_id") REFERENCES "orders" ("id");
 
 ALTER TABLE "orders" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 
-ALTER TABLE "order_statuses" ADD FOREIGN KEY ("id") REFERENCES "orders" ("id");
+ALTER TABLE "order_statuses" ADD FOREIGN KEY ("order_id") REFERENCES "orders" ("id");
 
 ALTER TABLE "carts" ADD FOREIGN KEY ("product_id") REFERENCES "products" ("id");
 

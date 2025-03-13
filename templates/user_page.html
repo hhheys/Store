@@ -59,7 +59,15 @@
                             {% endfor %}
                         </ul>
                         <p class="my-1 text-center">Статус</p>
-                        <p class="my-1 text-center text-bg-warning text-wrap rounded py-1">{{order.status}}</p>
+                        {% if order.status == 1 %}
+                    <p class="my-1 text-center text-bg-warning text-wrap rounded py-1">В обработке</p>
+                    {% elif order.status == 2 %}
+                    <p class="my-1 text-center text-bg-primary text-wrap rounded py-1">Собирается</p>
+                    {% elif order.status == 3 %}
+                    <p class="my-1 text-center text-bg-success text-wrap rounded py-1">Готов к получению</p>
+                    {% else %}
+                    <p class="my-1 text-center text-bg-danger text-wrap rounded py-1">None</p>
+                    {% endif %}
                     </div>
 
                     {% endfor %}
