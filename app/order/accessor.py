@@ -55,7 +55,7 @@ async def add_new_order(user_id: int, address: str) -> int:
     await db.execute("INSERT INTO orders (client_id, address) VALUES ($1, $2)", user_id, address)
 
     order_id = await db.fetchrow("SELECT id FROM orders WHERE client_id=$1 ORDER BY date DESC LIMIT 1;", user_id)
-    await set_order_status(order_id)
+    await set_order_status(order_id.get("id"))
     return order_id
 
 async def get_order_status(order_id: int):

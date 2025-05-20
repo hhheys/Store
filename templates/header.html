@@ -14,15 +14,25 @@
     <title>EStore</title>
     {% endif %}
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
     <header>
         <nav class="navbar navbar-expand-lg bg-white border-bottom">
         <div class="container">
             <a class="navbar-brand fw-bold" href="/">E store:</a>
+
             <div class="">
-                <ul class="navbar-nav me-auto">
+                <ul class="navbar-nav">
                     <li class="nav-item mx-3">
-                        <a class="nav-link active text-center" href="/">Главная</a>
+                                    <div class="btn-group">
+                          <button type="button" class="btn btn-active dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="true">
+                            Категории
+                          </button>
+                          <ul class="dropdown-menu">
+                              {% for cat in categories %}
+                              <li><a class="dropdown-item" href="/category?cat_id={{cat.id}}">{{cat.name}}</a></li>
+                                {% endfor %}
+                          </ul>
+                        </div>
                     </li>
                     <li class="nav-item mx-3">
                         <a class="nav-link text-dark" href="#">Покупателю</a>
@@ -39,7 +49,7 @@
                         <img src="../static/user_icon.png" class="user_logo">
                     </a>
                     {% else %}
-                    <a class="active text-center" href="/user/login">Войти</a>
+                    <a class="active text-center link" href="/user/login">Войти</a>
                     {% endif %}
                 </a>
             </div>

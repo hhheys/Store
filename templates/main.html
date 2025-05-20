@@ -3,12 +3,13 @@
         <div class="row">
             <!-- Левая панель категорий -->
             <div class="col-md-4">
-                <h4 class="fw-semibold text-center">Добро пожаловать в интернет-магазин электронной техники EStore!</h4>
+                <h4 class="fw-semibold text-center">Интернет-магазин электронной техники EStore</h4>
+                <h6 class="text-center">№1 по гаджетам, доверию и скорости доставки</h6>
                 <div class="p-3 rounded border">
                     <h5 class="my-3">Основные категории:</h5>
                     <ul class="list-unstyled mx-3">
                         {% for cat in categories %}
-                        <li class="my-2"><a href="/category?cat_id={{cat.id}}">{{cat.name}}</a></li>
+                        <li class="my-2"><a href="/category?cat_id={{cat.id}}" class="link">{{cat.name}}</a></li>
                         {% endfor %}
                     </ul>
                 </div>
@@ -19,12 +20,11 @@
 <!--                <div class="advertisement bg-light rounded mb-3 text-center border">-->
 <!--                    <img src="../static/ad.png" alt="" class="img-thumbnail img">-->
 <!--                </div>-->
-
                 <img src="../static/ad.png" alt="" class="rounded border img-fluid img mb-2 advertisement">
                 <!-- Горизонтальная галерея товаров -->
-                <div class="bg-light p-4 rounded border">
+                <div class="p-4 rounded border">
                     <h5>Бренды</h5>
-                    <div class="d-flex gap-2 bg-light p-2">
+                    <div class="d-flex gap-2 p-2">
                         {% for manufacturer in manufacturers %}
                         <a href="/manufacturer?man_id={{manufacturer.id}}"><img class="img-thumbnail p-3" style="max-height: 80px;" src="../static/img/manufacturers_images/{{manufacturer.image_filename}}"></a>
                         {% endfor %}
@@ -33,6 +33,6 @@
             </div>
         </div>
     </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+{% include 'footer.html' %}
 </body>
 </html>

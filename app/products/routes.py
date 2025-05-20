@@ -10,7 +10,7 @@ from app.cart.accessor import add_to_cart, check_product_in_cart, del_from_cart
 from app.category.accessor import get_all_categories, get_category_by_id
 from app.manufacturers.accessor import get_all_manufacturers, get_manufacturer_by_id
 from app.price.accessor import get_current_price
-from app.products.accessor import create_product, get_product_by_id
+from app.products.accessor import create_product, get_product_by_id, add_promotional_product, del_promotional_product
 from app.user.models import User
 from app.utils.cookies_session import get_current_admin, get_current_user
 from app.utils.utils import templates, save_product_image
@@ -76,7 +76,6 @@ async def add_to_cart_post(request: AddToCart, user: User = Depends(get_current_
         return HTTPException(status_code=401, detail="Not Authorized")
     product_id = request.product_id
     product = await get_product_by_id(int(product_id))
-    print(product)
     if not product:
         raise HTTPException(status_code=404)
     res = await add_to_cart(user.id, product_id, 1)
@@ -94,3 +93,16 @@ async def delete_from_cart_del(request: Request, pr_id = Annotated[int, Query()]
         return {'ok': True}
     except Exception as e:
         raise HTTPException(status_code=409, detail=str(e))
+
+@router.post("/add_prom_item")
+async def add_prom_item(product: AddToCart):
+    if await add_promotional_product(product.product_id):
+        return {'ok': True}
+    return {'ok': False}
+
+@router.post("/del_prom_item")
+async def del_prom_item(product: AddToCart):
+    if await del_promotional_product(product.product_id):
+        return {'ok': True}
+    return {'ok': False}
+

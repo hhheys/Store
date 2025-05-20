@@ -7,8 +7,8 @@ from starlette.exceptions import HTTPException
 from starlette.requests import Request
 from starlette.responses import RedirectResponse
 
-from app.category.accessor import get_category_by_id
-from app.manufacturers.accessor import get_manufacturer_by_id, create_manufacturer
+from app.category.accessor import get_category_by_id, get_all_categories
+from app.manufacturers.accessor import get_manufacturer_by_id, create_manufacturer, get_all_manufacturers
 from app.price.accessor import get_current_price
 from app.products.accessor import get_product_by_manufacturer
 from app.products.models import ProductCard
@@ -47,7 +47,9 @@ async def manufacturer_by_id(request: Request, man_id:int, user = Depends(get_cu
                                        "man_id": man_id,
                                        "cards": data,
                                        "manufacturer": manufacturer,
-                                       "current_user": user
+                                       "current_user": user,
+                                       "manufacturers": await get_all_manufacturers(),
+                                       "categories": await get_all_categories()
                                        })
 
 

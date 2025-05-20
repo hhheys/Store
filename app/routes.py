@@ -9,10 +9,11 @@ from app.manufacturers.routes import router as manufacturer_router
 from app.products.routes import router as products_router
 from app.cart.routes import router as cart_router
 from app.order.routes import router as order_router
+from app.warehouse.routes import router as warehouse_router
 
 
 def setup_routes(app: FastAPI):
-    app.mount("/static", StaticFiles(directory="../static"), name="static")
+    app.mount("/static", StaticFiles(directory="static"), name="static")
 
     app.include_router(admin_router)
 
@@ -23,3 +24,4 @@ def setup_routes(app: FastAPI):
     app.include_router(products_router)
     app.include_router(cart_router)
     app.include_router(order_router)
+    app.include_router(warehouse_router)

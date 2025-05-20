@@ -1,6 +1,5 @@
 {% include 'header.html' %}
-
-    <div class="container mt-4">
+<div class="container mt-4">
         <div class="row">
             <div class="col-md-5">
                 <div class="p-3 rounded border">
@@ -9,15 +8,23 @@
                     <p class="">в наличии {{count}} шт</p>
                     <div class="row">
                         <div class="col-md-7">
-                            <h5 class="py-2">{{price.price}} ₽</h5>
+                            {% if price.price %}
+                                <h5 class="py-2">{{price.price}} ₽</h5>
+                            {% else %}
+                                <h5 class="py-2">Цена не найдена</h5>
+                            {% endif %}
                         </div>
                         <div class="col-md-5">
                             {% if is_in_cart %}
-                                <p class="inactive text-center py-2">В корзине</p>
-                            {% elif count > 0%}
-                                <a class="nav-link active text-center py-2" href="#" onclick="add_to_cart({{product.id}})">В корзину</a>
+                                <button class="disabled-btn" onclick="del_from_cart({{product.id}})">В корзине</button>
+                            {% elif count > 0 and price.price %}
+                            <button class="click-btn" onclick="add_to_cart({{product.id}})">В корзину</button>
                             {% else %}
-                                <p class="inactive text-center py-2">В корзину</p>
+                                {% if not price.price %}
+                                    <button class="disabled-btn" disabled>Цена не найдена</button>
+                                    {% else %}
+                                    <button class="disabled-btn" disabled>Товар закончился</button>
+                                    {% endif %}
                             {% endif %}
                         </div>
                     </div>
@@ -33,17 +40,18 @@
                     <div class="row">
                         <div class="col-md-7">
                             <h5 class="py-2">Производитель: </h5>
-                            <a href="/manufacturer?man_id={{manufacturer.id}}"><img class="img-thumbnail p-3" style="max-height: 80px;" src="../static/img/manufacturers_images/{{manufacturer.image_filename}}"></a>
+                            <a href="/manufacturer?man_id={{manufacturer.id}}" class="link"><img class="img-thumbnail p-3" style="max-height: 80px;" src="../static/img/manufacturers_images/{{manufacturer.image_filename}}"></a>
                         </div>
                         <div class="col-md-5">
                             <h5 class="py-2">Категория: </h5>
-                            <a href="/category?cat_id={{category.id}}"><h6>{{category.name}}</h6></a>
+                            <a href="/category?cat_id={{category.id}}" class="link"><h6>{{category.name}}</h6></a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+{% include 'footer.html' %}
     <script>
         async function add_to_cart(product_id){
             event.preventDefault()
@@ -63,9 +71,30 @@
             if (json_res.status_code === 401) {
                 window.location.replace(window.location.origin + '/user/login');
             } else if (response.status === 200){
-                window.location.href = '/';
+                window.location.reload();
             } else {
                 alert("Не удалось добавить товар. Возможно он уже есть в корзине.")
+            }
+        }
+
+        async function del_from_cart(product_id){
+            event.preventDefault()
+            const response = await fetch('/product/del_from_cart?pr_id=' + product_id, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+            const json_res = await response.json();
+            console.log(JSON.stringify(json_res));
+            console.log(typeof parseInt(product_id), product_id);
+            console.log(json_res.status_code);
+            if (json_res.status_code === 401) {
+                window.location.replace(window.location.origin + '/user/login');
+            } else if (response.status === 200){
+                window.location.reload();
+            } else {
+                alert("Не удалось удалить товар.")
             }
         }
     </script>

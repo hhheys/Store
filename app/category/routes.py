@@ -4,7 +4,7 @@ from fastapi.params import Depends
 from pydantic import BaseModel
 from starlette.requests import Request
 
-from app.category.accessor import get_category_by_id, create_category
+from app.category.accessor import get_category_by_id, create_category, get_all_categories
 from app.manufacturers.accessor import get_manufacturer_by_id
 from app.price.accessor import get_current_price
 from app.products.accessor import get_products_by_category
@@ -38,13 +38,14 @@ async def category_by_id(request: Request, cat_id:int, user = Depends(get_curren
                 category
             )
         )
-    print(data)
     return templates.TemplateResponse("products_by_category.html",
                                       {"request": request,
                                        "cat_id": cat_id,
                                         "cards": data,
                                        "category": category,
-                                       "current_user": user
+                                       "current_user": user,
+                                       "all_categories": await get_all_categories(),
+                                       "categories": await get_all_categories()
                                        })
 
 @router.get("/create")

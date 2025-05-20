@@ -84,6 +84,13 @@ CREATE TABLE "carts" (
   "added_at" timestamp DEFAULT current_timestamp
 );
 
+CREATE TABLE "promotional_items" (
+  "id" SERIAL PRIMARY KEY,
+  "product_id" integer
+);
+
+ALTER TABLE "promotional_items" ADD FOREIGN KEY ("product_id") REFERENCES "products" ("id");
+
 ALTER TABLE "products" ADD FOREIGN KEY ("category_id") REFERENCES "categories" ("id");
 
 ALTER TABLE "products" ADD FOREIGN KEY ("manufacturer_id") REFERENCES "manufacturers" ("id");
