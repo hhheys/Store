@@ -20,7 +20,7 @@ async def zip_orders(data):
             positions.append(Position(product=product, price=price))
         orders.append(Order(id=order['id'],
                             positions=positions,
-                            user=await get_user_by_id(order['client_id']),
+                            user=await get_user_by_id(order['user_id']),
                             address=order['address'],
                             date=order['date'],
                             status=await get_order_status(order['id'])
@@ -28,7 +28,7 @@ async def zip_orders(data):
     return orders
 
 async def get_all_orders(user_id: int) -> List[Order]:
-    res = await db.fetch("SELECT * FROM orders WHERE client_id=$1 ORDER BY date DESC LIMIT 3", user_id)
+    res = await db.fetch("SELECT * FROM orders WHERE user_id=$1 ORDER BY date DESC LIMIT 3", user_id)
     return await zip_orders(res)
 
 async def get_all_orders_admin() -> List[Order]:
@@ -36,7 +36,7 @@ async def get_all_orders_admin() -> List[Order]:
     return await zip_orders(res)
 
 async def get_order(order_id: int, user_id: int) -> Order:
-    order = await db.fetchrow("SELECT * FROM orders WHERE client_id=$1 LIMIT 1", user_id)
+    order = await db.fetchrow("SELECT * FROM orders WHERE user_id=$1 LIMIT 1", user_id)
     products = await db.fetch("SELECT * FROM sales WHERE order_id=$1", order['id'])
     positions = []
     for product in products:
@@ -52,10 +52,9 @@ async def get_order(order_id: int, user_id: int) -> Order:
                         )
 
 async def add_new_order(user_id: int, address: str) -> int:
-    await db.execute("INSERT INTO orders (client_id, address) VALUES ($1, $2)", user_id, address)
-
-    order_id = await db.fetchrow("SELECT id FROM orders WHERE client_id=$1 ORDER BY date DESC LIMIT 1;", user_id)
-    await set_order_status(order_id.get("id"))
+    data = await db.fetchrow("INSERT INTO orders (user_id, address) VALUES ($1, $2) RETURNING *", user_id, address)
+    order_id = data["id"]
+    await set_order_status(order_id)
     return order_id
 
 async def get_order_status(order_id: int):

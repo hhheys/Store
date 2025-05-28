@@ -13,9 +13,9 @@ async def get_product_by_manufacturer(manufacturer_id: int):
     res = await db.fetch("SELECT * FROM products WHERE manufacturer_id = $1", manufacturer_id)
     return [Product(**pr) for pr in res]
 
-async def create_product(name: str, description: str, category_id: int, image_filename: str, product_price: int) -> Product | None:
+async def create_product(name: str, description: str, manufacturer_id:id, category_id: int, image_filename: str, product_price: int) -> Product | None:
     try:
-        res = await db.fetchrow("INSERT INTO products (name, product_code, description, manufacturer_id, category_id, image_filename) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *", name, generate_article_number(), description, 0, category_id, image_filename)
+        res = await db.fetchrow("INSERT INTO products (name, description, manufacturer_id, category_id, image_filename) VALUES ($1, $2, $3, $4, $5) RETURNING *", name, description, manufacturer_id, category_id, image_filename)
         product_id = res["id"]
         pr = await get_product_by_id(product_id)
         await set_price(pr.id, product_price)

@@ -13,8 +13,10 @@
             </div>
             </div>
 {% if cards|length == 0 %}
+            <div class="col-9 mx-auto">
             <div class="d-flex flex-grow-1 justify-content-center align-items-center">
                 <h2 class="text-center fs-5 my-5">Товаров пока нет..</h2>
+            </div>
             </div>
 {% else %}
             <div class="col-9">
@@ -36,7 +38,7 @@
                     <div class="row mx-3">
                         <div class="">
                             {% if card.new_price.price %}
-                                <h5 class="py-2">{{card.new_price.price}} ₽</h5>
+                                <h5 class="py-2">{{"{:,.0f}".format(card.new_price.price).replace(",", " ")}} ₽</h5>
                             {% else %}
                                 <h5 class="py-2">Цена не найдена</h5>
                             {% endif %}

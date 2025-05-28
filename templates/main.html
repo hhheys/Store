@@ -1,38 +1,174 @@
 {% include 'header.html' %}
-    <div class="container mt-4">
+<div class="">
+    <div class="text-center py-4 bg-light">
+        <h4 class="fw-semibold text-center">Интернет-магазин электронной техники EStore</h4>
+        <h6 class="text-center">№1 по гаджетам, доверию и скорости доставки</h6>
+    </div>
+
+    <div id="demo" class="carousel slide shadow-sm" data-bs-ride="carousel">
+
+  <!-- Indicators/dots -->
+  <div class="carousel-indicators">
+    <button type="button" data-bs-target="#demo" data-bs-slide-to="0" class="active button-carousel"></button>
+    <button type="button" data-bs-target="#demo" data-bs-slide-to="1" class="button-carousel"></button>
+<!--    <button type="button" data-bs-target="#demo" data-bs-slide-to="2" class="button-carousel"></button>-->
+  </div>
+
+  <!-- The slideshow/carousel -->
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <a href="/product/?pr_id=2">
+          <img src="../static/adip16.png" alt="Iphone16adv" class="img img-fluid w-100">
+      </a>
+    </div>
+    <div class="carousel-item">
+      <a href="/product/?pr_id=1">
+          <img src="../static/adip16pro.png" alt="Iphone16adv" class="img img-fluid w-100">
+      </a>
+    </div>
+<!--    <div class="carousel-item">-->
+<!--      <img src="../static/adip16.png" alt="" class="w-100">-->
+<!--    </div>-->
+  </div>
+
+  <!-- Left and right controls/icons -->
+  <button class="carousel-control-prev" type="button" data-bs-target="#demo" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon"></span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#demo" data-bs-slide="next">
+    <span class="carousel-control-next-icon"></span>
+  </button>
+</div>
+<!--    <img src="../static/ad.png" alt="" class="rounded border img-fluid img mb-2 advertisement">-->
+<!--    -->
+
+    <div class="container my-5">
+        <h4 class="mb-3">Основные категории</h4>
         <div class="row">
-            <!-- Левая панель категорий -->
-            <div class="col-md-4">
-                <h4 class="fw-semibold text-center">Интернет-магазин электронной техники EStore</h4>
-                <h6 class="text-center">№1 по гаджетам, доверию и скорости доставки</h6>
-                <div class="p-3 rounded border">
-                    <h5 class="my-3">Основные категории:</h5>
-                    <ul class="list-unstyled mx-3">
-                        {% for cat in categories %}
-                        <li class="my-2"><a href="/category?cat_id={{cat.id}}" class="link">{{cat.name}}</a></li>
-                        {% endfor %}
-                    </ul>
-                </div>
+            <div class="col-md-3 product-card category-card">
+                <a href="/category?cat_id=1" class="link">
+                    <div class="d-flex category-img">
+                        <img src="../static/img/products_images/Смартфон.jpg" alt="" class="img img-fluid mx-auto">
+                    </div>
+                    <h6 class="text-center">Смартфоны</h6>
+                </a>
             </div>
-            <!-- Центральная и правая часть -->
-            <div class="col-md-8">
-<!--                &lt;!&ndash; Блок рекламы &ndash;&gt;-->
-<!--                <div class="advertisement bg-light rounded mb-3 text-center border">-->
-<!--                    <img src="../static/ad.png" alt="" class="img-thumbnail img">-->
-<!--                </div>-->
-                <img src="../static/ad.png" alt="" class="rounded border img-fluid img mb-2 advertisement">
-                <!-- Горизонтальная галерея товаров -->
-                <div class="p-4 rounded border">
-                    <h5>Бренды</h5>
-                    <div class="d-flex gap-2 p-2">
-                        {% for manufacturer in manufacturers %}
-                        <a href="/manufacturer?man_id={{manufacturer.id}}"><img class="img-thumbnail p-3" style="max-height: 80px;" src="../static/img/manufacturers_images/{{manufacturer.image_filename}}"></a>
-                        {% endfor %}
-                </div>
-                </div>
+
+            <div class="col-md-3 product-card category-card">
+                <a href="/category?cat_id=2" class="link">
+                    <div class="d-flex category-img">
+                        <img src="../static/img/category_images/cases.png" alt="" class="img img-fluid mx-auto">
+                    </div>
+                    <h6 class="text-center">Аксессуары</h6>
+                </a>
+            </div>
+
+            <div class="col-md-3 product-card category-card">
+                <a href="/category?cat_id=3" class="link">
+                    <div class="d-flex category-img">
+                        <img src="../static/img/category_images/laptop.png" alt="" class="img img-fluid mx-auto">
+                    </div>
+                    <h6 class="text-center">Компьютеры и ноутбуки</h6>
+                </a>
+            </div>
+
+            <div class="col-md-3 product-card category-card">
+                <a href="/category?cat_id=4" class="link">
+                    <div class="d-flex category-img">
+                        <img src="../static/img/category_images/fridge.png" alt="" class="img img-fluid mx-auto">
+                    </div>
+                    <h6 class="text-center">Бытовая техника</h6>
+                </a>
+            </div>
+
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-md-3 product-card">
+                <a href="/category?cat_id=5" class="link">
+                    <div class="d-flex category-img">
+                        <img src="../static/img/category_images/dyson.jpg" alt="" class="img img-fluid mx-auto">
+                    </div>
+                    <h6 class="text-center">Красота и здоровье</h6>
+                </a>
+            </div>
+
+            <div class="col-md-3 product-card">
+                <a href="/category?cat_id=6" class="link">
+                    <div class="d-flex category-img">
+                        <img src="../static/img/category_images/tv.png" alt="" class="img img-fluid mx-auto">
+                    </div>
+                    <h6 class="text-center">ТВ, консоли и аудио</h6>
+                </a>
+            </div>
+
+            <div class="col-md-3 product-card">
+                <a href="/category?cat_id=7" class="link">
+                    <div class="d-flex category-img">
+                        <img src="../static/img/category_images/smart_lamp.png" alt="" class="img img-fluid mx-auto">
+                    </div>
+                    <h6 class="text-center">Умный дом</h6>
+                </a>
+            </div>
+
+            <div class="col-md-3 product-card">
+                <a href="/category?cat_id=8" class="link">
+                    <div class="d-flex category-img">
+                        <img src="../static/img/category_images/router.png" alt="" class="img img-fluid mx-auto">
+                    </div>
+                    <h6 class="text-center">Сетевое оборудование</h6>
+                </a>
             </div>
         </div>
+
+        <h4 class="mt-5">Производители</h4>
+        <div class="d-flex gap-1 p-2 overflow-x-auto">
+                {% for manufacturer in manufacturers %}
+                <a href="/manufacturer?man_id={{manufacturer.id}}"><img class="rounded p-3 product-card" style="max-height: 75px;" src="../static/img/manufacturers_images/{{manufacturer.image_filename}}"></a>
+                {% endfor %}
+        </div>
+
     </div>
+
+
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+
 {% include 'footer.html' %}
-</body>
-</html>
+
+
+
+
+
+
+<!--    <div class="container mt-4">-->
+<!--        <div class="row">-->
+<!--            &lt;!&ndash; Левая панель категорий &ndash;&gt;-->
+<!--            <div class="col-md-4">-->
+<!--                <h4 class="fw-semibold text-center">Интернет-магазин электронной техники EStore</h4>-->
+<!--                <h6 class="text-center">№1 по гаджетам, доверию и скорости доставки</h6>-->
+<!--                <div class="p-3 rounded border">-->
+<!--                    <h5 class="my-3">Основные категории:</h5>-->
+<!--                    <ul class="list-unstyled mx-3">-->
+<!--                        {% for cat in categories %}-->
+<!--                        <li class="my-2"><a href="/category?cat_id={{cat.id}}" class="link">{{cat.name}}</a></li>-->
+<!--                        {% endfor %}-->
+<!--                    </ul>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-md-8">-->
+<!--                <img src="../static/ad.png" alt="" class="rounded border img-fluid img mb-2 advertisement">-->
+<!--                <div class="p-4 rounded border">-->
+<!--                    <h5>Бренды</h5>-->
+<!--                    <div class="d-flex gap-2 p-2">-->
+<!--                        {% for manufacturer in manufacturers %}-->
+<!--                        <a href="/manufacturer?man_id={{manufacturer.id}}"><img class="img-thumbnail p-3" style="max-height: 80px;" src="../static/img/manufacturers_images/{{manufacturer.image_filename}}"></a>-->
+<!--                        {% endfor %}-->
+<!--                </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--{% include 'footer.html' %}-->
+<!--</body>-->
+<!--</html>-->

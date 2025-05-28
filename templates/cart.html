@@ -15,7 +15,11 @@
         <img src="../static/img/products_images/{{product_card.product.image_filename}}" alt="" style="width: 50px" class="rounded">
         <h6 class="my-auto mx-4">{{product_card.product.name}}</h6>
         <p class="my-auto ms-auto mx-4">{{product_card.new_price.price}} ₽</p>
-        <a href="/product/del_from_cart?pr_id={{product_card.product.id}}" class="my-auto btn btn-danger" onclick="del_from_cart({{product_card.product.id}})">Удалить</a>
+        <a href="/product/del_from_cart?pr_id={{product_card.product.id}}" class="my-auto btn del-btn" onclick="del_from_cart({{product_card.product.id}})">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"/>
+</svg>
+                        </a>
     </div>
 
     {% endif %}
@@ -26,10 +30,36 @@
         {% if not (cart | selectattr('count', '>', 0) | list | length) > 0 %}
         <h6 class="text-center">Корзина пуста, здесь отображаются товары, которые доступны для заказа (количество > 0)</h6>
         {% else %}
-        <label for="address">Адрес заказа</label>
-        <input id="address" name="address" type="text" placeholder=" Адрес" class="rounded border p-1 form-control" style="max-width: 250px">
-        <input type="submit" name="" id="" class="btn btn-success">
+        <hr>
+        <div class="d-flex">
+            <div>
+            <label for="address" class="my-1">Адрес заказа</label>
+            <input id="address" name="address" type="text" placeholder=" Адрес" class="rounded border p-1 form-control" style="max-width: 250px">
+            </div>
+            <div class="ms-auto my-auto">
+                <input type="submit" name="" id="" class="active mt-1">
+            </div>
+        </div>
         {% endif %}
     </form>
 </div>
 </div>
+<script>
+        async function del_from_cart(product_id) {
+        event.preventDefault()
+        const response = await fetch('/product/del_from_cart?pr_id=' + product_id, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        const json_res = await response.json();
+        if (json_res.status_code === 401) {
+            window.location.reload();
+        } else if (response.status === 200) {
+            window.location.reload();
+        } else {
+            alert("Не удалось добавить товар. Возможно он уже есть в корзине.")
+        }
+    }
+</script>

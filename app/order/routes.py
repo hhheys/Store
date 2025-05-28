@@ -45,7 +45,7 @@ async def create_order_post(request: Request, address: Annotated[str, Form()], u
     cart = await get_all_cart(user.id)
     for product in cart:
         try:
-            await add_new_sale(product.product.id, order_id.get("id"))
+            await add_new_sale(product.product.id, order_id)
         except Exception as e:
             print(e)
             continue
