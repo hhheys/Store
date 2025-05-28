@@ -1,22 +1,20 @@
 {% include 'header.html' %}
 <div class="container mt-4">
     <div class="row">
-        <div class="col-md-5">
+        <div class="col-md-6">
                 <div class="border rounded p-3">
                     <h5>Информация о пользователе: </h5>
                     <p class="mt-4">Имя: {{current_user.username}}</p>
                     <p>Номер телефона: {{current_user.phone_number}}</p>
-                    <p>Дата регистрации: {{current_user.registration_date}}</p>
+                    <p>Дата регистрации: {{current_user.registration_date.strftime('%d.%m.%Y')}}</p>
                 </div>
-
                 <div class="border rounded p-3 mt-3">
-
                     <div class="d-flex mb-3">
                         <h5 class="my-auto">Корзина</h5>
                         {% if cart|length == 0 or not (cart | selectattr('count', '>', 0) | list | length) > 0 %}
                         <p href="" class="btn btn-secondary ms-auto my-auto inactive" onclick="">Оформить заказ</p>
                         {% else %}
-                        <a href="/cart" class="btn btn-success ms-auto">Оформить заказ</a>
+                        <a href="/cart" class="active ms-auto">Оформить заказ</a>
                         {% endif %}
                     </div>
 
@@ -25,8 +23,8 @@
                     {% endif %}
                     {% for product_card in cart %}
                     {% if product_card.count <= 0 %}
-                    <div class="d-flex gray border p-2 rounded mt-2">
-                        <img src="../static/img/products_images/{{product_card.product.image_filename}}" alt="" style="width: 50px" class="rounded">
+                    <div class="d-flex gray border p-1 rounded mt-2">
+                        <img src="../static/img/products_images/{{product_card.product.image_filename}}" alt="" style="width: 50px; height: auto;" class="rounded img img-fluid">
                         <h6 class="my-auto mx-4 text-decoration-line-through">{{product_card.product.name}}</h6>
                         <p class="my-auto ms-auto mx-4">товар закончился - {{product_card.new_price.price}} ₽</p>
                         <a href="/product/del_from_cart?pr_id={{product_card.product.id}}" class="my-auto btn btn-danger" onclick="del_from_cart({{product_card.product.id}})">Удалить</a>
@@ -36,29 +34,34 @@
                         <img src="../static/img/products_images/{{product_card.product.image_filename}}" alt="" style="width: 50px" class="rounded">
                         <h6 class="my-auto mx-4">{{product_card.product.name}}</h6>
                         <p class="my-auto ms-auto mx-4">{{product_card.new_price.price}} ₽</p>
-                        <a href="/product/del_from_cart?pr_id={{product_card.product.id}}" class="my-auto btn btn-danger" onclick="del_from_cart({{product_card.product.id}})">Удалить</a>
+                        <a href="/product/del_from_cart?pr_id={{product_card.product.id}}" class="my-auto btn del-btn" onclick="del_from_cart({{product_card.product.id}})">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"/>
+</svg>
+                        </a>
                     </div>
                     {% endif %}
                     {% endfor %}
                 </div>
             </div>
 
-        <div class="col-md-7">
+        <div class="col-md-6">
             <div class="border rounded p-3">
                 <h4>Заказы: </h4>
-                <div class="d-flex">
+                <div class="d-flex overflow-auto">
 
                     {% for order in orders %}
-                    <div class="card border rounded p-3 m-2 flex-grow-1" style="max-width: 250px">
+                    <div class="col-6 card border rounded p-3 m-2 flex-grow-1" style="max-width: 250px">
                         <h5 class="text-center">Заказ №{{order.id}}</h5>
-                        <p class="text-center">Дата оформления: <br>{{order.date}}</p>
+                        <p class="text-center">Дата оформления: <br>{{order.date.strftime('%d.%m.%Y %H:%M')}}</p>
                         <p class="my-1">Позиции: </p>
                         <ul class="list-unstyled mx-3">
                             {% for position in order.positions %}
                             <li>{{position.product.name}} - {{position.price.price}}  ₽</li>
                             {% endfor %}
                         </ul>
-                        <p class="my-1 text-center">Статус</p>
+                        <div class="mt-auto">
+                            <p class="my-1 text-center">Статус</p>
                         {% if order.status == 1 %}
                     <p class="my-1 text-center text-bg-warning text-wrap rounded py-1">В обработке</p>
                     {% elif order.status == 2 %}
@@ -68,6 +71,7 @@
                     {% else %}
                     <p class="my-1 text-center text-bg-danger text-wrap rounded py-1">None</p>
                     {% endif %}
+                        </div>
                     </div>
 
                     {% endfor %}
@@ -92,7 +96,7 @@
         if (json_res.status_code === 401) {
             window.location.reload();
         } else if (response.status === 200) {
-            window.location.href = '/';
+            window.location.reload();
         } else {
             alert("Не удалось добавить товар. Возможно он уже есть в корзине.")
         }

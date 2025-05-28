@@ -1,3 +1,4 @@
+BEGIN;
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 CREATE TABLE admins (
@@ -52,7 +53,7 @@ CREATE TABLE "sales" (
 CREATE TABLE "users" (
   "id" SERIAL PRIMARY KEY,
   "username" varchar unique,
-  "phone_number" integer,
+  "phone_number" varchar,
   "password" varchar,
   "registration_date" timestamp DEFAULT current_timestamp
 );
@@ -60,7 +61,7 @@ CREATE TABLE "users" (
 CREATE TABLE "orders" (
   "id" SERIAL PRIMARY KEY,
   "user_id" integer,
-  "date" timestamp,
+  "date" timestamp DEFAULT current_timestamp,
   "address" varchar
 );
 
@@ -112,3 +113,14 @@ ALTER TABLE "carts" ADD FOREIGN KEY ("product_id") REFERENCES "products" ("id");
 ALTER TABLE "carts" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 
 ALTER TABLE carts ADD CONSTRAINT unique_product_client UNIQUE (product_id, user_id);
+
+INSERT INTO categories (name) VALUES
+('Смартфоны'),
+('Аксессуары'),
+('Компьютеры и ноутбуки'),
+('Бытовая техника'),
+('Красота и здоровье'),
+('ТВ, консоли и аудио'),
+('Умный дом'),
+('Сетевое оборудование');
+END;

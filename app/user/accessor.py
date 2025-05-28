@@ -9,7 +9,7 @@ async def create_user(username: str, phone_number: str, password: str) -> User |
         user = await db.fetchrow("SELECT * FROM users WHERE username = $1", username)
         return User(**user)
 
-    except Exception:
+    except Exception as e:
         return None
 
 async def get_user_by_id(id: int) -> User | None:

@@ -2,7 +2,7 @@
  <div class="container mt-5">
      <h4 class="text-center my-3">Товары по категории: {{category.name}}</h4>
         <div class="row">
-            <div class="col-3">
+            <div class="col-md-3">
                 <div class="border rounded mb-4 p-3">
                 <h5 class="my-3">Основные категории:</h5>
                     <ul class="list-unstyled mx-3">
@@ -13,14 +13,16 @@
             </div>
             </div>
 {% if cards|length == 0 %}
+            <div class="col-9 mx-auto">
             <div class="d-flex flex-grow-1 justify-content-center align-items-center">
                 <h2 class="text-center fs-5 my-5">Товаров пока нет..</h2>
             </div>
+            </div>
 {% else %}
-            <div class="col-9">
+            <div class="col-9 mx-auto">
                 <div class="row">
     {% for card in cards %}
-            <div class="col-xl-4 mb-4">
+            <div class="col-lg-4 mb-4">
             <a href="/product/?pr_id={{card.product.id}}" class="product-link">
             <div class="h-100 d-flex border rounded flex-column p-2 product-card">
                 <div class="card-body flex-grow-1 p-0">
@@ -28,15 +30,15 @@
                          class="card-img-top object-fit-contain"
                          alt="{{card.product.name}} project"
                          style="height: 250px">
-                    <h3 class="card-title p-3">{{card.product.name}}</h3>
+                    <h4 class="card-title p-3">{{card.product.name}}</h4>
                 </div>
 
-                <div class="my-3 align-items-center" style="border-top: none;">
+                <div class="my-1 align-items-center" style="border-top: none;">
 
                     <div class="row mx-3">
                         <div class="">
                             {% if card.new_price.price %}
-                                <h5 class="py-2">{{card.new_price.price}} ₽</h5>
+                                <h5 class="py-2">{{ "{:,.0f}".format(card.new_price.price).replace(",", " ") }} ₽</h5>
                             {% else %}
                                 <h5 class="py-2">Цена не найдена</h5>
                             {% endif %}
